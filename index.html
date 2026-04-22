@@ -23,18 +23,19 @@
             height: 100vh;
         }
 
-        /* --- EXTRAORDINARY HEARTS --- */
+        /* --- EXTRAORDINARY BACKGROUND (HEARTS, FLOWERS, BOWS) --- */
         .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
         
-        .heart {
+        .floating-el {
             position: absolute;
-            animation: floatHearts 6s infinite ease-in;
+            animation: floatElements 6s infinite ease-in;
             filter: drop-shadow(0 0 5px var(--glow-pink));
             opacity: 0;
             z-index: 0;
+            user-select: none;
         }
 
-        @keyframes floatHearts {
+        @keyframes floatElements {
             0% { transform: translateY(110vh) rotate(0deg) scale(0.5); opacity: 0; }
             20% { opacity: 0.8; }
             80% { opacity: 0.8; }
@@ -61,7 +62,7 @@
         }
 
         h1 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--hot-pink); margin: 10px 0; }
-        img { width: 180px; height: 180px; object-fit: cover; border-radius: 50%; border: 5px solid white; margin-bottom: 15px; }
+        .profile-img { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 5px solid white; margin-bottom: 15px; }
 
         button {
             background: var(--hot-pink); color: white; border: none;
@@ -73,20 +74,29 @@
 
         input { padding: 12px; border-radius: 15px; border: 2px solid var(--hot-pink); text-align: center; margin: 10px 0; outline: none; }
 
-        /* Delayed Button Animation */
-        #surpriseBtn {
-            display: none;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        /* --- ENVELOPE & LETTER DESIGN --- */
+        .envelope-wrapper { position: relative; cursor: pointer; margin-top: 20px; }
+        .envelope {
+            position: relative; width: 280px; height: 180px;
+            background: #f08080; border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 0 auto;
         }
-
-        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
-
-        audio {
-            margin-top: 15px;
-            width: 100%;
-            height: 35px;
-            filter: sepia(20%) saturate(70%) hue-rotate(290deg); /* Pinkish tint for audio player */
+        .envelope::before {
+            content: ''; position: absolute; top: 0; z-index: 2;
+            border-left: 140px solid transparent; border-right: 140px solid transparent;
+            border-top: 100px solid #ff9999; transform-origin: top; transition: transform 0.5s 0.5s ease;
         }
+        .letter {
+            position: absolute; bottom: 0; left: 10px; width: 260px; height: 160px;
+            background: white; padding: 20px; box-sizing: border-box;
+            transition: 0.8s 0.1s ease; z-index: 1; border-radius: 5px;
+            overflow-y: auto; text-align: justify; font-size: 0.8rem;
+        }
+        .envelope-wrapper.open .envelope::before { transform: rotateX(180deg); z-index: 0; }
+        .envelope-wrapper.open .letter { transform: translateY(-150px); height: 350px; z-index: 3; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
+
+        audio { margin-top: 15px; width: 100%; height: 30px; }
+        #surpriseBtn { display: none; margin-top: 20px; width: 100%; }
 
         #fireworks-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99; }
         #love-text {
@@ -111,46 +121,54 @@
     <section id="sec2">
         <div class="glass-card">
             <h1>Secret Access 🔒</h1>
-            <input type="password" id="passInput" placeholder="Passcode?">
+            <p>Only for my favorite person</p>
+            <input type="password" id="passInput" placeholder="Enter Passcode">
             <br>
             <button onclick="checkPass()">Unlock ✨</button>
         </div>
     </section>
 
     <section id="sec3">
-        <img src="https://ibb.co/pvhpbRyQ" alt="Pic 1">
+        <img src="pic1.jpg" class="profile-img" alt="Memory 1">
         <div class="glass-card">
             <h1>My Feelings... 🌸</h1>
-            <p>Aap meri dunya ka wo sukoon ho jiski mujhe hamesha talash thi. I am so lucky to have you.</p>
+            <p>Aap meri dunya ka wo sukoon ho jiski mujhe hamesha talash thi. I am so lucky to have you in my life.</p>
             <button onclick="navigate(4)">Next Page →</button>
         </div>
     </section>
 
     <section id="sec4">
-        <img src="https://via.placeholder.com/180" alt="Pic 2">
+        <img src="pic2.jpg" class="profile-img" alt="Memory 2">
         <h1 style="font-size: 3rem;">Happy Birthday! 🎂</h1>
-        <button onclick="showLetter()">Read My Letter 💌</button>
+        <p>Today is all about you...</p>
+        <button onclick="navigate(5)">Open My Letter 💌</button>
     </section>
 
     <section id="sec5">
-        <div class="glass-card" style="max-height: 85vh; overflow-y: auto;">
-            <h1>To My World... ✨</h1>
-            <p id="longParagraph" style="text-align: justify; font-size: 0.85rem; line-height: 1.4;">
-                Aap meri zindagi ka wo haseen khwab ho jo haqiqat ban gaya hai. Jab se aap meri life mein aaye ho, har cheez khoobsurat lagne lagi hai. Aapki hansi, aapka gussa, aapka mujh se larna aur phir maan jana—ye sab mere liye bohot precious hai. Main dua kerta hoon ke hum hamesha aise hi sath rahein. Aap ko har wo khushi mile jiske aap haqdar ho. Aap mere liye kitni special ho, ye lafzon mein batana mumkin nahi hai, lekin mere dil se hamesha yahi dua nikalti hai ke aap salamat raho. (Write your 200-300 words here).
-            </p>
-            
-            <p style="font-weight: 600; margin-top: 15px; color: var(--hot-pink);">Listen to this... 🎤</p>
-            <audio controls>
-                <source src="rehmmyyy-sys/.github.io/wish/myvoice.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
+        <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+            <div class="envelope">
+                <div class="letter" id="theLetter">
+                    <h2 style="font-family: 'Dancing Script'; color: #d63384;">To My World... ✨</h2>
+                    <p>
+                        Aap meri zindagi ka wo haseen khwab ho jo haqiqat ban gaya hai. Jab se aap meri life mein aaye ho, har cheez khoobsurat lagne lagi hai. 
+                        (Yahan apna 200-300 words ka pura paragraph likhen jo aap ne likha hai). Aap mere liye kitni special ho, ye lafzon mein batana mumkin nahi hai, lekin mere dil se hamesha yahi dua nikalti hai ke aap salamat raho.
+                    </p>
+                    
+                    <p style="font-weight: 600; margin-top: 15px; color: var(--hot-pink);">Listen to this... 🎤</p>
+                    <audio controls id="letterAudio">
+                        <source src="myvoice.mp3" type="audio/mpeg">
+                        <source src="myvoice.mp3.m4a" type="audio/x-m4a">
+                    </audio>
 
-            <button id="surpriseBtn" onclick="navigate(6)">Click for Surprise! 🎆</button>
+                    <button id="surpriseBtn" onclick="navigate(6)">Click for Surprise! 🎆</button>
+                </div>
+            </div>
+            <p id="clickNote" style="margin-top: 20px; color: #d63384; font-weight: bold; background: white; padding: 5px 15px; border-radius: 20px;">Tap the envelope to open 💌</p>
         </div>
     </section>
 
     <section id="sec6">
-        <h1 style="font-family: 'Pacifico';">Ready?</h1>
+        <h1 style="font-family: 'Pacifico';">Ready for the magic?</h1>
         <button onclick="startCelebration()" style="font-size: 1.8rem;">CELEBRATE! 💖</button>
     </section>
 
@@ -160,29 +178,35 @@
     <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
     <script>
         const bdayDate = "2026-05-26T00:00:00"; 
-        const passcode = "2626"; 
+        const passcode = "2626"; // Aapka passcode
 
-        // Extraordinary Heart Background
-        function createExtraordinaryHearts() {
+        // Floating Hearts, Flowers, and Bows
+        function createFloatingElements() {
             const bg = document.getElementById('heart-bg');
+            const elements = ['❤️', '🌸', '🎀', '💖', '✨']; 
             const colors = ['#ffdae9', '#ff85a2', '#ffffff', '#f8bbd0'];
+
             setInterval(() => {
-                const h = document.createElement('div');
-                h.classList.add('heart');
-                h.innerHTML = '❤️';
-                h.style.left = Math.random() * 100 + 'vw';
-                h.style.color = colors[Math.floor(Math.random() * colors.length)];
-                h.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                h.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                bg.appendChild(h);
-                setTimeout(() => h.remove(), 6000);
+                const el = document.createElement('div');
+                el.classList.add('floating-el');
+                el.innerHTML = elements[Math.floor(Math.random() * elements.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.color = colors[Math.floor(Math.random() * colors.length)];
+                el.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                el.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                bg.appendChild(el);
+                setTimeout(() => el.remove(), 6000);
             }, 250);
         }
-        createExtraordinaryHearts();
+        createFloatingElements();
 
-        // Countdown
+        // Countdown Logic
         setInterval(() => {
             const diff = new Date(bdayDate) - new Date();
+            if(diff <= 0) {
+                document.getElementById('timer').innerText = "It's Your Day! 🎂";
+                return;
+            }
             const d = Math.floor(diff / 86400000);
             const h = Math.floor((diff % 86400000) / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
@@ -197,24 +221,29 @@
 
         function checkPass() {
             if(document.getElementById('passInput').value === passcode) navigate(3);
-            else alert("NOT SO EASY BABEE🌸");
+            else alert("Try again, Babee 🐥");
         }
 
-        // Special logic for Section 5 (Letter + Audio)
-        function showLetter() {
-            navigate(5);
-            // Hide button initially
-            const btn = document.getElementById('surpriseBtn');
-            btn.style.display = "none";
-            // Show button after 5 seconds
-            setTimeout(() => {
-                btn.style.display = "inline-block";
-            }, 5000); // 5000ms = 5 seconds. Aap isay change kar sakte hain.
+        function openEnvelope() {
+            const wrapper = document.getElementById('envelopeWrapper');
+            if(!wrapper.classList.contains('open')) {
+                wrapper.classList.add('open');
+                document.getElementById('clickNote').style.display = 'none';
+                document.getElementById('letterAudio').play();
+                
+                // Show surprise button after 5 seconds
+                setTimeout(() => {
+                    const btn = document.getElementById('surpriseBtn');
+                    btn.style.display = "block";
+                    const letter = document.getElementById('theLetter');
+                    letter.scrollTop = letter.scrollHeight;
+                }, 5000);
+            }
         }
 
         function startCelebration() {
             const fw = new Fireworks.default(document.getElementById('fireworks-container'), { 
-                hue: { min: 300, max: 345 }, particles: 150 
+                hue: { min: 300, max: 345 }, particles: 200, explosion: 6
             });
             fw.start();
             const loveText = document.getElementById('love-text');
