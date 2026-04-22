@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no">
     <title>Birthday Magic 🌸</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.css">
     <style>
@@ -11,6 +11,7 @@
         :root {
             --soft-pink: #ffdae9;
             --hot-pink: #ff85a2;
+            --envelope-color: #f08080; /* Soft Red/Pink */
             --white: #ffffff;
             --glow-pink: rgba(255, 133, 162, 0.8);
         }
@@ -23,7 +24,7 @@
             height: 100vh;
         }
 
-        /* --- EXTRAORDINARY BACKGROUND (HEARTS, FLOWERS, BOWS) --- */
+        /* --- EXTRAORDINARY HEARTS & EMOJIS --- */
         .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
         
         .floating-el {
@@ -74,29 +75,94 @@
 
         input { padding: 12px; border-radius: 15px; border: 2px solid var(--hot-pink); text-align: center; margin: 10px 0; outline: none; }
 
-        /* --- ENVELOPE & LETTER DESIGN --- */
-        .envelope-wrapper { position: relative; cursor: pointer; margin-top: 20px; }
-        .envelope {
-            position: relative; width: 280px; height: 180px;
-            background: #f08080; border-radius: 0 0 10px 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 0 auto;
+        /* --- NEW 3D REALISTIC ENVELOPE DESIGN --- */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            width: 300px;
+            height: 200px;
+            transition: 0.5s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            margin-top: 50px;
         }
-        .envelope::before {
-            content: ''; position: absolute; top: 0; z-index: 2;
-            border-left: 140px solid transparent; border-right: 140px solid transparent;
-            border-top: 100px solid #ff9999; transform-origin: top; transition: transform 0.5s 0.5s ease;
-        }
-        .letter {
-            position: absolute; bottom: 0; left: 10px; width: 260px; height: 160px;
-            background: white; padding: 20px; box-sizing: border-box;
-            transition: 0.8s 0.1s ease; z-index: 1; border-radius: 5px;
-            overflow-y: auto; text-align: justify; font-size: 0.8rem;
-        }
-        .envelope-wrapper.open .envelope::before { transform: rotateX(180deg); z-index: 0; }
-        .envelope-wrapper.open .letter { transform: translateY(-150px); height: 350px; z-index: 3; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
 
-        audio { margin-top: 15px; width: 100%; height: 30px; }
-        #surpriseBtn { display: none; margin-top: 20px; width: 100%; }
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: var(--envelope-color);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2), inset 0 0 15px rgba(0,0,0,0.1); /* Realistic shadow and inner glow */
+            margin: 0 auto;
+            transform-style: preserve-3d;
+        }
+
+        /* Envelope Flap (3D realistic) */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            z-index: 2;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #ff9999;
+            transform-origin: top;
+            transition: transform 0.6s ease;
+            filter: drop-shadow(0 4px 5px rgba(0,0,0,0.1)); /* Soft shadow for depth */
+        }
+
+        /* Inside shadow effect when flap is closed */
+        .envelope::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.15) 20%, transparent); /* Paper fold effect */
+            border-radius: 0 0 10px 10px;
+            z-index: 1;
+        }
+
+        /* The actual Letter (Realistic paper texture + depth) */
+        .letter {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: #fffdf9; /* Slightly off-white for realistic paper */
+            padding: 25px;
+            box-sizing: border-box;
+            transition: transform 0.8s 0.2s ease, height 0.8s 0.2s ease;
+            z-index: 1;
+            border-radius: 5px;
+            overflow-y: auto;
+            text-align: justify;
+            font-size: 0.8rem;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1), inset 0 0 20px rgba(0,0,0,0.05); /* Paper depth */
+            transform: translateZ(-5px); /* Initial depth behind flap */
+        }
+
+        /* Open State Animations (3D transition) */
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(160deg); /* Flap opens *forward* slightly for realistic perspective */
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-200px) translateZ(5px); /* Letter moves *up* and slightly forward */
+            height: 400px; /* Expands more for easier reading */
+            z-index: 3;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3); /* Letter casts shadow *back* onto envelope */
+        }
+
+        .letter h2 { font-family: 'Dancing Script', cursive; color: #d63384; font-size: 1.4rem; margin-bottom: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .letter p { line-height: 1.5; color: #333; }
+
+        audio { margin-top: 15px; width: 100%; height: 35px; }
+        #surpriseBtn { display: none; margin-top: 25px; width: 100%; font-size: 1.2rem; padding: 15px; }
 
         #fireworks-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 99; }
         #love-text {
@@ -154,7 +220,7 @@
                         (Yahan apna 200-300 words ka pura paragraph likhen jo aap ne likha hai). Aap mere liye kitni special ho, ye lafzon mein batana mumkin nahi hai, lekin mere dil se hamesha yahi dua nikalti hai ke aap salamat raho.
                     </p>
                     
-                    <p style="font-weight: 600; margin-top: 15px; color: var(--hot-pink);">Listen to this... 🎤</p>
+                    <p style="font-weight: 600; margin-top: 15px; color: var(--hot-pink); text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Listen to this... 🎤</p>
                     <audio controls id="letterAudio">
                         <source src="myvoice.mp3" type="audio/mpeg">
                         <source src="myvoice.mp3.m4a" type="audio/x-m4a">
@@ -163,7 +229,7 @@
                     <button id="surpriseBtn" onclick="navigate(6)">Click for Surprise! 🎆</button>
                 </div>
             </div>
-            <p id="clickNote" style="margin-top: 20px; color: #d63384; font-weight: bold; background: white; padding: 5px 15px; border-radius: 20px;">Tap the envelope to open 💌</p>
+            <p id="clickNote" style="margin-top: 20px; color: #d63384; font-weight: bold; background: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Tap the envelope to open 💌</p>
         </div>
     </section>
 
@@ -177,13 +243,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
     <script>
-        const bdayDate = "2026-05-26T00:00:00"; 
-        const passcode = "2626"; // Aapka passcode
+        const bdayDate = "2026-05-26T00:00:00"; // Birthday Date
+        const passcode = "2626"; // Passcode
 
         // Floating Hearts, Flowers, and Bows
         function createFloatingElements() {
             const bg = document.getElementById('heart-bg');
-            const elements = ['❤️', '🌸', '🎀', '💖', '✨']; 
+            const elements = ['💗', '🌸', '🎀', '💖', '✨']; 
             const colors = ['#ffdae9', '#ff85a2', '#ffffff', '#f8bbd0'];
 
             setInterval(() => {
@@ -221,29 +287,37 @@
 
         function checkPass() {
             if(document.getElementById('passInput').value === passcode) navigate(3);
-            else alert("Try again, Babee 🐥");
+            else alert("Galat Code! 🌸");
         }
 
+        // --- Realistic 3D Envelope Logic ---
         function openEnvelope() {
             const wrapper = document.getElementById('envelopeWrapper');
+            // If it's not already open, open it
             if(!wrapper.classList.contains('open')) {
                 wrapper.classList.add('open');
                 document.getElementById('clickNote').style.display = 'none';
-                document.getElementById('letterAudio').play();
+                
+                // Play audio automatically after a small delay
+                setTimeout(() => {
+                    document.getElementById('letterAudio').play();
+                }, 1000);
                 
                 // Show surprise button after 5 seconds
                 setTimeout(() => {
                     const btn = document.getElementById('surpriseBtn');
                     btn.style.display = "block";
+                    // Smoothly scroll to bottom to show button
                     const letter = document.getElementById('theLetter');
-                    letter.scrollTop = letter.scrollHeight;
+                    letter.scrollTo({ top: letter.scrollHeight, behavior: 'smooth' });
                 }, 5000);
             }
         }
 
         function startCelebration() {
             const fw = new Fireworks.default(document.getElementById('fireworks-container'), { 
-                hue: { min: 300, max: 345 }, particles: 200, explosion: 6
+                hue: { min: 300, max: 345 }, particles: 200, explosion: 6, opacity: 0.9,
+                flickering: true
             });
             fw.start();
             const loveText = document.getElementById('love-text');
