@@ -17,7 +17,6 @@
 
         body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: var(--soft-pink); overflow-x: hidden; height: 100vh; }
 
-        /* --- BACKGROUND ELEMENTS --- */
         .heart-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .floating-el { position: absolute; animation: float 6s infinite linear; opacity: 0; z-index: 0; }
         @keyframes float {
@@ -30,27 +29,11 @@
         .active { display: flex; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            padding: 25px; border-radius: 25px;
-            border: 1px solid white;
-            max-width: 400px; width: 90%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); padding: 25px; border-radius: 25px; border: 1px solid white; max-width: 400px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .profile-img { width: 140px; height: 140px; border-radius: 50%; border: 4px solid white; object-fit: cover; margin-bottom: 15px; }
 
-        /* --- THE 3D ENVELOPE (FIXED SLIDE) --- */
-        .env-wrapper {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
-        }
+        /* --- ENVELOPE SETUP --- */
+        .env-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; width: 100%; }
 
         .env-container {
             position: relative;
@@ -60,85 +43,60 @@
             cursor: pointer;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 5;
-            margin-top: 50px;
+            margin-top: -50px; /* Thora upar rakha hai taake slide niche ho */
         }
 
-        /* Jab open ho to envelope neeche slide kare */
+        /* Jab open ho, pura container niche slide ho */
         .env-container.open {
-            transform: translateY(180px);
+            transform: translateY(120px);
         }
 
-        .envelope {
-            position: relative;
-            width: 100%; height: 100%;
-            background: var(--env-bg);
-            border-radius: 0 0 12px 12px;
-            transform-style: preserve-3d;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
+        .envelope { position: relative; width: 100%; height: 100%; background: var(--env-bg); border-radius: 0 0 12px 12px; transform-style: preserve-3d; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .env-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-top: 110px solid var(--env-dark); transform-origin: top; transition: transform 0.6s ease; z-index: 4; }
+        .env-front { position: absolute; bottom: 0; width: 0; height: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-bottom: 105px solid var(--env-light); z-index: 3; }
 
-        .env-flap {
-            position: absolute; top: 0; left: 0;
-            width: 0; height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 110px solid var(--env-dark);
-            transform-origin: top;
-            transition: transform 0.6s ease;
-            z-index: 4;
-        }
-
-        .env-front {
-            position: absolute; bottom: 0;
-            width: 0; height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-bottom: 105px solid var(--env-light);
-            z-index: 3;
-        }
-
-        /* --- SWIPEABLE LETTER (BOOKLET) --- */
+        /* --- LETTER (AB ENVELOPE KE SATH RAHEGA) --- */
         .letter-book {
-            position: absolute; bottom: 5px; left: 10px;
-            width: 280px; height: 180px;
-            background: #fff; z-index: 2;
-            transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 15px; box-sizing: border-box;
-            border-radius: 8px; overflow: hidden;
-            display: flex; flex-direction: column;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: #fff;
+            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), height 0.8s ease;
+            padding: 15px;
+            box-sizing: border-box;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .env-container.open .env-flap { transform: rotateX(180deg); }
+
+        /* FIXED: Letter ab envelope ke niche nahi jayega balki screen ke center mein upar khulega */
+        .env-container.open .letter-book {
+            transform: translateY(-260px); /* Adjust kiya taake envelope ke upar aur center mein rahe */
+            height: 420px;
+            z-index: 10;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
         .pages-container { display: flex; transition: transform 0.5s ease; height: 100%; width: 300%; }
         .page { width: 33.33%; padding: 10px; box-sizing: border-box; overflow-y: auto; text-align: justify; }
-        .page h2 { font-family: 'Dancing Script', cursive; color: var(--hot-pink); margin: 0; font-size: 1.3rem; }
-        .page p { font-size: 0.8rem; line-height: 1.5; color: #444; }
-
-        /* Letter open state (Upar slide hoga) */
-        .env-container.open .env-flap { transform: rotateX(180deg); }
-        .env-container.open .letter-book {
-            transform: translateY(-380px); 
-            height: 480px; 
-            z-index: 10;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.3);
-        }
+        .page h2 { font-family: 'Dancing Script', cursive; color: var(--hot-pink); margin: 0; font-size: 1.3rem; text-align: center; }
+        .page p { font-size: 0.85rem; line-height: 1.5; color: #444; }
 
         .swipe-btns { display: none; justify-content: space-between; margin-top: 10px; width: 100%; }
         .env-container.open .swipe-btns { display: flex; }
-        .s-btn { background: var(--hot-pink); color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; }
-        
-        #surpriseBtn { display: none; background: #333; color: white; border: none; padding: 12px; width: 100%; margin-top: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .s-btn { background: var(--hot-pink); color: white; border: none; padding: 6px 15px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+        #surpriseBtn { display: none; background: #333; color: white; border: none; padding: 12px; width: 100%; margin-top: 10px; border-radius: 10px; font-weight: bold; }
 
         button.nav-btn { background: var(--hot-pink); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 15px; }
 
-        /* --- FINAL EFFECTS --- */
         #fireworks-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 98; }
-        #love-text { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); 
-            font-family: 'Pacifico'; font-size: 2.2rem; color: #d63384; opacity: 0; 
-            z-index: 100; text-align: center; width: 100%; pointer-events: none;
-            text-shadow: 0 0 15px white; transition: 1.2s cubic-bezier(0.17, 0.89, 0.32, 1.49);
-        }
+        #love-text { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); font-family: 'Pacifico'; font-size: 2.2rem; color: #d63384; opacity: 0; z-index: 100; text-align: center; width: 100%; pointer-events: none; text-shadow: 0 0 15px white; transition: 1.2s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
     </style>
 </head>
 <body>
@@ -188,18 +146,18 @@
                         <div class="pages-container" id="pages">
                             <div class="page">
                                 <h2>To My World... ✨</h2>
-                                <p>Aap meri zindagi ka wo haseen khwab ho jo haqiqat ban gaya hai. Jab se aap meri life mein aaye ho, har cheez khoobsurat lagne lagi hai...</p>
-                                <p style="color:var(--hot-pink); text-align:center; font-size:0.7rem; margin-top:15px;">Swipe or use Next →</p>
+                                <p>Aap meri zindagi ka wo haseen khwab ho jo haqiqat ban gaya hai. (Yahan apna message likhein jo kafi bada ho sakta hai).</p>
+                                <p style="color:var(--hot-pink); text-align:center; font-size:0.75rem; margin-top:20px;">Swipe or use Next →</p>
                             </div>
                             <div class="page">
                                 <h2>My Happiness.. 🌸</h2>
-                                <p>Aapka hona mere liye sab kuch hai. Main lafzon mein nahi bata sakta ke aap mere liye kitni special ho...</p>
+                                <p>Aapka hona mere liye sab kuch hai. Har din aapke sath bitana ek blessing hai...</p>
                                 <p style="color:var(--hot-pink); text-align:center; font-size:0.7rem;">Ek aur page hai →</p>
                             </div>
                             <div class="page">
                                 <h2>Always Yours 💖</h2>
-                                <p>Listen to this message:</p>
-                                <audio id="audio" controls style="width:100%; margin-top:5px;">
+                                <p>Happy Birthday once again! Suniye ye...</p>
+                                <audio id="audio" controls style="width:100%; margin-top:10px;">
                                     <source src="myvoice.mp3.m4a" type="audio/x-m4a">
                                     <source src="myvoice.mp3" type="audio/mpeg">
                                 </audio>
@@ -213,13 +171,13 @@
                     </div>
                 </div>
             </div>
-            <p id="hint" style="margin-top:20px; font-weight:bold; color:#d63384; background:white; padding:5px 15px; border-radius:20px;">Tap the envelope 💌</p>
+            <p id="hint" style="margin-top:20px; font-weight:bold; color:#d63384; background:white; padding:5px 15px; border-radius:20px; z-index:1;">Tap the envelope 💌</p>
         </div>
     </section>
 
     <section id="sec6">
         <div class="glass-card">
-            <h1 style="font-family:'Pacifico';">Ready for the end?</h1>
+            <h1 style="font-family:'Pacifico';">Ready?</h1>
             <button onclick="startCelebration()" style="font-size: 1.5rem; padding: 15px 35px; border-radius: 50px; border:none; background:var(--hot-pink); color:white; font-weight:bold; cursor:pointer;">CELEBRATE! 💖</button>
         </div>
     </section>
@@ -254,7 +212,7 @@
 
         function checkPass() {
             if(document.getElementById('passInput').value === passcode) navigate(3);
-            else alert("Galat Code! Try again 🌸");
+            else alert("Galat Code! 🌸");
         }
 
         let currentPage = 0;
@@ -262,8 +220,7 @@
             document.getElementById('envContainer').classList.add('open');
             document.getElementById('hint').style.display = 'none';
             document.getElementById('audio').play();
-            // Button delay taake audio sun lein
-            setTimeout(() => { document.getElementById('surpriseBtn').style.display = 'block'; }, 5000);
+            setTimeout(() => { document.getElementById('surpriseBtn').style.display = 'block'; }, 6000);
         }
 
         function movePage(dir) {
@@ -275,7 +232,6 @@
             const container = document.getElementById('fireworks-container');
             const fireworks = new Fireworks.default(container);
             fireworks.start();
-            
             const txt = document.getElementById('love-text');
             txt.style.opacity = "1";
             txt.style.transform = "translate(-50%, -50%) scale(1)";
@@ -288,7 +244,7 @@
             const h = Math.floor((diff % 86400000) / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerText = `${d}d ${h}h ${m}m ${s}s`;
+            document.getElementById('timer').innerText = `${d}d ${h}h ${m}s`;
         }, 1000);
     </script>
 </body>
