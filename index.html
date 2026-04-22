@@ -41,14 +41,15 @@
 
         .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 5px solid white; object-fit: cover; margin-bottom: 15px; }
 
-        /* --- CRAZY REALISTIC 3D ENVELOPE (Adjusted Position) --- */
+        /* --- FIXED POSITION 3D ENVELOPE --- */
         .env-container {
             position: relative;
             width: 320px;
             height: 220px;
             perspective: 1500px;
-            margin-top: 100px; /* Position niche karne ke liye */
+            margin-top: 25vh; /* Push it down from the top center */
             cursor: pointer;
+            z-index: 5;
         }
 
         .envelope {
@@ -96,19 +97,19 @@
         .page h2 { font-family: 'Dancing Script', cursive; color: var(--hot-pink); margin: 0; }
         .page p { font-size: 0.85rem; line-height: 1.5; color: #444; }
 
+        /* OPEN STATE ADJUSTMENT */
         .env-container.open .env-flap { transform: rotateX(180deg); }
         .env-container.open .letter-book {
-            transform: translateY(-220px);
-            height: 400px; z-index: 5;
+            transform: translateY(-240px); /* Moves up into the empty space */
+            height: 440px; z-index: 5;
             box-shadow: 0 40px 80px rgba(0,0,0,0.4);
         }
 
-        /* Controls */
         .swipe-btns { display: none; justify-content: space-between; margin-top: 10px; }
         .env-container.open .swipe-btns { display: flex; }
-        .s-btn { background: var(--hot-pink); color: white; border: none; padding: 5px 12px; border-radius: 10px; font-size: 0.7rem; }
+        .s-btn { background: var(--hot-pink); color: white; border: none; padding: 8px 15px; border-radius: 15px; font-size: 0.75rem; }
         
-        #surpriseBtn { display: none; background: #333; color: white; border: none; padding: 10px; width: 100%; margin-top: 15px; border-radius: 10px; }
+        #surpriseBtn { display: none; background: #333; color: white; border: none; padding: 12px; width: 100%; margin-top: 15px; border-radius: 10px; font-weight: bold; }
 
         button { background: var(--hot-pink); color: white; border: none; padding: 10px 25px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 15px; }
 
@@ -116,7 +117,7 @@
         #fireworks-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 98; }
         #love-text { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); 
-            font-family: 'Pacifico'; font-size: 2.2rem; color: #d63384; opacity: 0; 
+            font-family: 'Pacifico'; font-size: 2.5rem; color: #d63384; opacity: 0; 
             z-index: 100; text-align: center; width: 100%; pointer-events: none;
             text-shadow: 0 0 15px white; transition: 1s cubic-bezier(0.17, 0.89, 0.32, 1.49);
         }
@@ -168,7 +169,7 @@
                         <div class="page">
                             <h2>My World... ✨</h2>
                             <p>Aap meri zindagi ka wo haseen khwab ho jo haqiqat ban gaya hai. (Part 1 of your long message...)</p>
-                            <p style="color:var(--hot-pink); text-align:center; font-size:0.7rem;">Swipe or use Next →</p>
+                            <p style="color:var(--hot-pink); text-align:center; font-size:0.75rem; margin-top:20px;">Swipe or use Next →</p>
                         </div>
                         <div class="page">
                             <h2>Dear One.. 🌸</h2>
@@ -191,11 +192,11 @@
                 </div>
             </div>
         </div>
-        <p id="hint" style="margin-top:30px; font-weight:bold; color:#d63384;">Tap the envelope 💌</p>
+        <p id="hint" style="margin-top:30px; font-weight:bold; color:#d63384; background: white; padding: 5px 15px; border-radius: 20px;">Tap the envelope 💌</p>
     </section>
 
     <section id="sec6">
-        <button onclick="startCelebration()" style="font-size: 1.5rem; padding: 20px 40px;">CELEBRATE! 💖</button>
+        <button onclick="startCelebration()" style="font-size: 1.5rem; padding: 20px 40px; border-radius: 50px;">CELEBRATE! 💖</button>
     </section>
 
     <div id="fireworks-container"></div>
@@ -208,7 +209,7 @@
 
         function createHearts() {
             const bg = document.getElementById('heart-bg');
-            const items = ['💗', '🌸', '🎀', '💖'];
+            const items = ['❤️', '🌸', '🎀', '💖'];
             setInterval(() => {
                 const el = document.createElement('div');
                 el.classList.add('floating-el');
@@ -251,7 +252,7 @@
             
             const txt = document.getElementById('love-text');
             txt.style.opacity = "1";
-            txt.style.transform = "translate(-50%, -50%) scale(1)";
+            txt.style.transform = "translate(-50%, -50%) scale(1.2)";
         }
 
         setInterval(() => {
@@ -261,7 +262,7 @@
             const h = Math.floor((diff % 86400000) / 3600000);
             const m = Math.floor((diff % 3600000) / 60000);
             const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerText = `${d}d ${h}h ${m}m ${s}s`;
+            document.getElementById('timer').innerText = `${d}d ${h}h ${m}s`;
         }, 1000);
     </script>
 </body>
